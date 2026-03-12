@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { MealCard } from "../components/MealCard";
 
 // Color palette
 // --bone: #e7e0cf;
@@ -40,5 +41,11 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+    MealCard: {
 
+    },
+    MealcardImage:{
+        height: 70,
+        width: 70,
+    }
 })

@@ -1,10 +1,11 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import {styles} from "./Constants/style";
 import { useEffect, useState } from "react";
 import { getRecipeByArea } from "./services/apiservices";
 import { Searchbar } from "./components/SearchBar";
 import { mealItem, mealPreview } from "./Constants/types";
 import { setupDB } from "./services/dbService";
+import { MealCard } from "./components/MealCard";
 
 
 export default function HomeScreen(){
@@ -29,6 +30,11 @@ export default function HomeScreen(){
         <View style={styles.HomeBackground}>
             <Text>Page D'accueil</Text>
             <Searchbar onResults={setMeals}/>
+            <FlatList
+            data={meals}
+            renderItem={({item}) => <MealCard meal={item} />}
+            keyExtractor={(item) => item.idMeal}
+            />
             <Text>Resultats: {meals.length}</Text>
         </View>
     );
