@@ -1,5 +1,5 @@
 import {openDatabaseSync }from 'expo-sqlite';
-import { mealItemRetyped } from '../Constants/types';
+import { mealItem } from '../Constants/types';
 
 const db = openDatabaseSync('pandm3.db');
 
@@ -18,7 +18,7 @@ export function setupDB(){
         )`);
 }
 
-export function addMeal(meal: mealItemRetyped){
+export function addMeal(meal: mealItem){
     let strIngredients: string = '';
     for (let i = 0; i < meal.Ingredients.length; i++){
         strIngredients += meal.Ingredients[i];
@@ -36,10 +36,10 @@ export function addMeal(meal: mealItemRetyped){
     );
 }
 
-export function getMealByName(name: string): mealItemRetyped[]{
-    const meals = db.getAllSync<mealItemRetyped>(`
-        SELECT * FROM meals
-        WHERE meals.Meal LIKE ?`, [`%${name}%`]);
+// export function getMealByName(name: string): mealItem[]{
+//     const meals = db.getAllSync<mealItem>(`
+//         SELECT * FROM meals
+//         WHERE meals.Meal LIKE ?`, [`%${name}%`]);
 
-    return meals;
-}
+//     return meals;
+// }

@@ -1,60 +1,60 @@
-export interface mealItem {
+export interface sourceMealItem {
             idMeal: string,
-            Meal: string,
-            MealAlternate: string,
-            Category: string,
-            Area: string,
-            Instructions: string,
-            MealThumb: string,
-            Tags: string,
-            Youtube: string,
-            Ingredient1: string,
-            Ingredient2: string,
-            Ingredient3: string,
-            Ingredient4: string,
-            Ingredient5: string,
-            Ingredient6: string,
-            Ingredient7: string,
-            Ingredient8: string,
-            Ingredient9: string,
-            Ingredient10: string,
-            Ingredient11: string,
-            Ingredient12: string,
-            Ingredient13: string,
-            Ingredient14: string,
-            Ingredient15: string,
-            Ingredient16: string,
-            Ingredient17: string,
-            Ingredient18: string,
-            Ingredient19: string,
-            Ingredient20: string,
-            Measure1: string,
-            Measure2: string,
-            Measure3: string,
-            Measure4: string,
-            Measure5: string,
-            Measure6: string,
-            Measure7: string,
-            Measure8: string,
-            Measure9: string,
-            Measure10: string,
-            Measure11: string,
-            Measure12: string,
-            Measure13: string,
-            Measure14: string,
-            Measure15: string,
-            Measure16: string,
-            Measure17: string,
-            Measure18: string,
-            Measure19: string,
-            Measure20: string,
-            Source: string,
-            ImageSource: string,
-            CreativeCommonsConfirmed: string,
+            strMeal: string,
+            strMealAlternate: string,
+            strCategory: string,
+            strArea: string,
+            strInstructions: string,
+            strMealThumb: string,
+            strTags: string,
+            strYoutube: string,
+            strIngredient1: string,
+            strIngredient2: string,
+            strIngredient3: string,
+            strIngredient4: string,
+            strIngredient5: string,
+            strIngredient6: string,
+            strIngredient7: string,
+            strIngredient8: string,
+            strIngredient9: string,
+            strIngredient10: string,
+            strIngredient11: string,
+            strIngredient12: string,
+            strIngredient13: string,
+            strIngredient14: string,
+            strIngredient15: string,
+            strIngredient16: string,
+            strIngredient17: string,
+            strIngredient18: string,
+            strIngredient19: string,
+            strIngredient20: string,
+            strMeasure1: string,
+            strMeasure2: string,
+            strMeasure3: string,
+            strMeasure4: string,
+            strMeasure5: string,
+            strMeasure6: string,
+            strMeasure7: string,
+            strMeasure8: string,
+            strMeasure9: string,
+            strMeasure10: string,
+            strMeasure11: string,
+            strMeasure12: string,
+            strMeasure13: string,
+            strMeasure14: string,
+            strMeasure15: string,
+            strMeasure16: string,
+            strMeasure17: string,
+            strMeasure18: string,
+            strMeasure19: string,
+            strMeasure20: string,
+            strSource: string,
+            strImageSource: string,
+            strCreativeCommonsConfirmed: string,
             dateModified: string
 }
 
-export interface mealItemRetyped {
+export interface mealItem {
             idMeal: number,
             Meal: string,
             Category: string,
@@ -67,30 +67,55 @@ export interface mealItemRetyped {
             Measures: string[],
 }
 
-export function retypeMeal(meal: mealItem): mealItemRetyped {
-    const ingredients: string[] = []
-    const measures: string[] = []
+export function retypeMeal(meals: sourceMealItem[]): mealItem[] {
+    let results: mealItem[] = [];
+    for(let i = 0; i < meals.length; i++){
+        const ingredients: string[] = []
+        const measures: string[] = []
 
-    for (let i = 1; i <= 20; i++) {
-        const ingredient = meal[`Ingredient${i}` as keyof mealItem] as string
-        const measure = meal[`Measure${i}` as keyof mealItem] as string
+        for (let j = 1; j <= 20; j++) {
+            const ingredient = meals[i][`strIngredient${j}` as keyof sourceMealItem] as string
+            const measure = meals[i][`strMeasure${j}` as keyof sourceMealItem] as string
 
-        if (ingredient && ingredient.trim() !== "") {
-            ingredients.push(ingredient)
-            measures.push(measure)
+            if (ingredient && ingredient.trim() !== "") {
+                ingredients.push(ingredient)
+                measures.push(measure)
+            }
         }
+
+        results.push({
+            idMeal: Number(meals[i].idMeal),
+            Meal: meals[i].strMeal,
+            Category: meals[i].strCategory,
+            Area: meals[i].strArea,
+            Instructions: meals[i].strInstructions,
+            MealThumb: meals[i].strMealThumb,
+            Tags: meals[i].strTags,
+            Youtube: meals[i].strYoutube,
+            Ingredients: ingredients,
+            Measures: measures
+        })
     }
 
-    return {
-        idMeal: Number(meal.idMeal),
-        Meal: meal.Meal,
-        Category: meal.Category,
-        Area: meal.Area,
-        Instructions: meal.Instructions,
-        MealThumb: meal.MealThumb,
-        Tags: meal.Tags,
-        Youtube: meal.Youtube,
-        Ingredients: ingredients,
-        Measures: measures
+    return results;
+}
+
+export interface mealPreview {
+  idMeal: string;
+  Meal: string;
+  MealThumb: string;
+}
+
+export function getMealsPreview(meals: sourceMealItem[]) :mealPreview[]{
+    let resuts: mealPreview[] = [];
+
+    for (let i = 0 ; i < meals.length; i++) {
+        resuts.push({
+            idMeal: meals[i].idMeal,
+            Meal: meals[i].strMeal,
+            MealThumb: meals[i].strMealThumb,
+        })
     }
+
+    return resuts;
 }
