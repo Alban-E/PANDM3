@@ -42,10 +42,15 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     MealCard: {
-
+        flex: 1,
+        justifyContent: "center",
+        alignItems: 'center',
     },
     MealcardImage:{
         height: 70,
         width: 70,
-    }
+    },
+    MealCardName: {
+
+    },
 })

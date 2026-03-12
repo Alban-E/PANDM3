@@ -49,11 +49,11 @@ export async function getFilters(area: boolean = false, category: boolean = fals
     return [];
 }
 
-export async function getMealDetails(id: number): Promise<mealItem[]>{
+export async function getMealDetails(id: number): Promise<mealItem | null>{
     const apiResults = await axiosInstance.get("/lookup.php",{
         params:{
             i: String(id)
         }
-    })
-    return retypeMeal(apiResults.data?.meals ?? [])
+    });
+    return retypeMeal(apiResults.data?.meals[0] ?? []) ;
 }

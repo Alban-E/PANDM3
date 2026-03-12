@@ -67,37 +67,38 @@ export interface mealItem {
             Measures: string[],
 }
 
-export function retypeMeal(meals: sourceMealItem[]): mealItem[] {
-    let results: mealItem[] = [];
-    for(let i = 0; i < meals.length; i++){
-        const ingredients: string[] = []
-        const measures: string[] = []
+export function retypeMeal(meal: sourceMealItem): mealItem | null {
+    if (!meal) { return null;}
 
-        for (let j = 1; j <= 20; j++) {
-            const ingredient = meals[i][`strIngredient${j}` as keyof sourceMealItem] as string
-            const measure = meals[i][`strMeasure${j}` as keyof sourceMealItem] as string
+    const ingredients: string[] = []
+    const measures: string[] = []
 
-            if (ingredient && ingredient.trim() !== "") {
-                ingredients.push(ingredient)
-                measures.push(measure)
-            }
+    for (let j = 1; j <= 20; j++) {
+        const ingredient = meal[`strIngredient${j}` as keyof sourceMealItem] as string
+        const measure = meal[`strMeasure${j}` as keyof sourceMealItem] as string
+
+        if (ingredient && ingredient.trim() !== "") {
+            ingredients.push(ingredient)
+            measures.push(measure)
         }
-
-        results.push({
-            idMeal: Number(meals[i].idMeal),
-            Meal: meals[i].strMeal,
-            Category: meals[i].strCategory,
-            Area: meals[i].strArea,
-            Instructions: meals[i].strInstructions,
-            MealThumb: meals[i].strMealThumb,
-            Tags: meals[i].strTags,
-            Youtube: meals[i].strYoutube,
-            Ingredients: ingredients,
-            Measures: measures
-        })
     }
 
-    return results;
+    return {
+        idMeal: Number(meal.idMeal),
+        Meal: meal.strMeal,
+        Category: meal.strCategory,
+        Area: meal.strArea,
+        Instructions: meal.strInstructions,
+        MealThumb: meal.strMealThumb,
+        Tags: meal.strTags,
+        Youtube: meal.strYoutube,
+        Ingredients: ingredients,
+        Measures: measures
+    }
+}
+
+export function retypeMeals(meals: sourceMealItem[]): mealItem[] {
+    return meals.map(meal => retypeMeal(meal)).filter(Boolean) as mealItem[];
 }
 
 export interface mealPreview {

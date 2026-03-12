@@ -5,8 +5,8 @@ import { styles } from "../Constants/style";
 
 export function MealCard({meal}: { meal: mealPreview}){
     return(
-        <TouchableOpacity onPress={() => router.push(`/Details?id=${meal.idMeal}`)}>
-            <Text>{meal.Meal}</Text>
+        <TouchableOpacity onPress={() => router.push(`/Details?id=${meal.idMeal}`)} style={styles.MealCard}>
+            <Text style={styles.MealCardName}>{meal.Meal}</Text>
             <Image 
             source={{ uri: meal.MealThumb }}
             style={styles.MealcardImage}

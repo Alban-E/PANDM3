@@ -34,6 +34,7 @@ export default function HomeScreen(){
             data={meals}
             renderItem={({item}) => <MealCard meal={item} />}
             keyExtractor={(item) => item.idMeal}
+            style={{flex:1}}
             />
             <Text>Resultats: {meals.length}</Text>
         </View>
