@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { mealPreview } from "../Constants/types";
 import { getRecipeByName } from "../services/apiservices";
+import { styles } from "../Constants/style";
 
 export function Searchbar({ onResults }: { onResults: (meals: mealPreview[]) => void }){
     const [search, setSearch] = useState('');
@@ -30,6 +31,7 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[]) => 
         value={search}
         onChangeText={(text) => setSearch(text)}
         placeholder="Rechercher"
+        style={styles.SearchBar}
         />
     );
 }

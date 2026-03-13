@@ -27,7 +27,7 @@ export default function DetailsScreen(){
             <Text>{meal?.Category}</Text>
             <Text>{meal?.Area}</Text>
             <Text>{meal?.Instructions}</Text>
-            <Image source={{uri: meal?.MealThumb}}/>
+            <Image source={{uri: meal?.MealThumb}} style={styles.MealImage}/>
             <Text>{meal?.Tags}</Text>
             <Text>{meal?.Youtube}</Text>
             <Text>{meal?.Ingredients?.join(', ')}</Text>

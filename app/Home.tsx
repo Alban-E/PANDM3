@@ -28,13 +28,14 @@ export default function HomeScreen(){
     
     return(
         <View style={styles.HomeBackground}>
-            <Text>Page D'accueil</Text>
+            <Text style={styles.HomeTitle}>Page D'accueil</Text>
             <Searchbar onResults={setMeals}/>
             <FlatList
             data={meals}
             renderItem={({item}) => <MealCard meal={item} />}
             keyExtractor={(item) => item.idMeal}
             style={{flex:1}}
+            
             />
             <Text>Resultats: {meals.length}</Text>
         </View>
