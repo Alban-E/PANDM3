@@ -63,23 +63,23 @@ export interface mealItem {
             MealThumb: string,
             Tags: string,
             Youtube: string,
-            Ingredients: string[],
-            Measures: string[],
+            Ingredients: string,
+            Measures: string,
 }
 
 export function retypeMeal(meal: sourceMealItem): mealItem | null {
     if (!meal) { return null;}
 
-    const ingredients: string[] = []
-    const measures: string[] = []
+    let ingredients: string = "";
+    let measures: string = "";
 
     for (let j = 1; j <= 20; j++) {
         const ingredient = meal[`strIngredient${j}` as keyof sourceMealItem] as string
         const measure = meal[`strMeasure${j}` as keyof sourceMealItem] as string
 
         if (ingredient && ingredient.trim() !== "") {
-            ingredients.push(ingredient)
-            measures.push(measure)
+            ingredients += ingredient;
+            measures += measure;
         }
     }
 
@@ -102,19 +102,19 @@ export function retypeMeals(meals: sourceMealItem[]): mealItem[] {
 }
 
 export interface mealPreview {
-  idMeal: string;
+  idMeal: number;
   Meal: string;
   MealThumb: string;
 }
 
-export function getMealsPreview(meals: sourceMealItem[]) :mealPreview[]{
+export function getMealsPreview(meals: mealItem[]) :mealPreview[]{
     let resuts: mealPreview[] = [];
 
     for (let i = 0 ; i < meals.length; i++) {
         resuts.push({
             idMeal: meals[i].idMeal,
-            Meal: meals[i].strMeal,
-            MealThumb: meals[i].strMealThumb,
+            Meal: meals[i].Meal,
+            MealThumb: meals[i].MealThumb,
         })
     }
 

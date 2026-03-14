@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { TextInput } from "react-native";
 import { mealPreview } from "../Constants/types";
-import { getRecipeByName } from "../services/apiservices";
-import { styles } from "../Constants/style";
+import { styles, Colors } from "../Constants/style";
+import { useMealByName } from "../hooks/useMeals";
 
 export function Searchbar({ onResults }: { onResults: (meals: mealPreview[]) => void }){
     const [search, setSearch] = useState('');
@@ -15,11 +15,11 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[]) => 
             }
 
             try{
-                const meals = await getRecipeByName(search);
+                const meals = await useMealByName(search);
                 onResults(meals);
             }
             catch (error) {
-                console.log(`An error occured while searching a meal by name : ${error}`);
+                console.error(`An error occured while searching a meal by name : ${error}`);
             }
         }
 
@@ -31,6 +31,7 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[]) => 
         value={search}
         onChangeText={(text) => setSearch(text)}
         placeholder="Rechercher"
+        placeholderTextColor={Colors.darkText}
         style={styles.SearchBar}
         />
     );

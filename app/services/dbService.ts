@@ -18,28 +18,78 @@ export function setupDB(){
         )`);
 }
 
-export function addMeal(meal: mealItem){
-    let strIngredients: string = '';
-    for (let i = 0; i < meal.Ingredients.length; i++){
-        strIngredients += meal.Ingredients[i];
+export function addMeals(meals: mealItem[]){
+    for (let i = 0; i < meals.length; i++) {
+        addMeal(meals[i]);
     }
-    
-    let strMeasures: string = '';
-    for (let i = 0; i < meal.Measures.length; i++){
-        strMeasures += meal.Measures[i];
-    }
+}
 
+export function addMeal(meal: mealItem){
     db.runSync(`
-        INSERT INTO meals (idMeal, Meal, Category, Area, Instructions, MealThumb, Tags, Youtube, Ingredients, Measures) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [meal.idMeal, meal.Meal, meal.Category, meal.Area, meal.Instructions, meal.MealThumb, meal.Tags, meal.Youtube, strIngredients, strMeasures]
+        INSERT OR IGNORE INTO meals (idMeal, Meal, Category, Area, Instructions, MealThumb, Tags, Youtube, Ingredients, Measures) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+            meal.idMeal, 
+            meal.Meal, 
+            meal.Category, 
+            meal.Area, 
+            meal.Instructions, 
+            meal.MealThumb, 
+            meal.Tags, 
+            meal.Youtube, 
+            meal.Ingredients, 
+            meal.Measures
+        ]
     );
 }
 
-// export function getMealByName(name: string): mealItem[]{
-//     const meals = db.getAllSync<mealItem>(`
-//         SELECT * FROM meals
-//         WHERE meals.Meal LIKE ?`, [`%${name}%`]);
+export function getMealById(id: number): mealItem | null {
+    const meal = db.getFirstSync<mealItem>(`
+        SELECT * FROM meals
+        WHERE idMeal = ?`, [id]);
+    
+    if (meal) {
+        return {
+            ...meal,
+            Ingredients: meal.Ingredients,
+            Measures: meal.Measures
+        };
+    }
+    return null;
+}
 
-//     return meals;
-// }
+
+export function getMealsByName(name: string): mealItem[]{
+    const meals = db.getAllSync<mealItem>(`
+        SELECT * FROM meals
+        WHERE meals.Meal LIKE ?`, [`%${name}%`]);
+
+    return meals.map(meal => ({
+        ...meal,
+        Ingredients: meal.Ingredients,
+        Measures: meal.Measures
+    }));
+}
+
+export function getMealsByCategory(category: string): mealItem[] {
+    const meals = db.getAllSync<mealItem>(`
+        SELECT * FROM meals
+        WHERE meals.Category = ?`, [category]);
+
+    return meals.map(meal => ({
+        ...meal,
+        Ingredients: meal.Ingredients,
+        Measures: meal.Measures
+    }));
+}
+
+export function getMealsByArea(area: string): mealItem[] {
+    const meals = db.getAllSync<mealItem>(`
+        SELECT * FROM meals
+        WHERE Area = ?`, [area]);
+
+        return meals.map(meal => ({
+        ...meal,
+        Ingredients: meal.Ingredients,
+        Measures: meal.Measures
+    }));
+}

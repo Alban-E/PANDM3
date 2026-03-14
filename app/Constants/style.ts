@@ -1,8 +1,7 @@
 import { StyleSheet } from "react-native";
-import { MealCard } from "../components/MealCard";
 
 // Color palette
-const Colors = {
+export const Colors = {
     lightBackGround: "#f7f4e8",
     darkBackground: "#5b5a5f",
     title: "#BB5B24",
@@ -46,9 +45,12 @@ export const styles = StyleSheet.create({
     },
     SearchBar: {
         fontSize: 50,
-        color: Colors.ligthText,
-        paddingTop: 20,
-        paddingBottom: 5,
+        backgroundColor: Colors.lightBackGround,
+        color: Colors.darkText,
+        borderRadius: 10,
+        width: 350,
+        marginTop: 20,
+        padding: 5,
     },
     MealCard: {
         flex: 1,
@@ -73,11 +75,35 @@ export const styles = StyleSheet.create({
     },
     DetailsBackground: {
         flex: 1,
-        justifyContent: "center",
         alignItems: "center",
+        backgroundColor: Colors.darkBackground,
     },
-    MealImage: {
-    height: 100,
-    width: 100,
+    MealTitle: {
+
+    },
+    MealCategory: {
+
+    },
+    MealArea:{
+
+    },
+    MealInstructions: {
+
+    },
+    MealThumb: {
+        height: 100,
+        width: 100,
+    },
+    MealTags: {
+
+    },
+    MealVideo: {
+
+    },
+    MealIngredients: {
+
+    },
+    MealMeasures: {
+
     }
 })

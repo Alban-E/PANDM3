@@ -1,11 +1,11 @@
 import { View, Text, FlatList } from "react-native";
 import {styles} from "./Constants/style";
 import { useEffect, useState } from "react";
-import { getRecipeByArea } from "./services/apiservices";
 import { Searchbar } from "./components/SearchBar";
-import { mealItem, mealPreview } from "./Constants/types";
+import { mealPreview } from "./Constants/types";
 import { setupDB } from "./services/dbService";
 import { MealCard } from "./components/MealCard";
+import { useMealByArea } from "./hooks/useMeals";
 
 
 export default function HomeScreen(){
@@ -16,11 +16,11 @@ export default function HomeScreen(){
 
         async function getInitialResults() {
             try{
-                const results = await getRecipeByArea("French");
+                const results = await useMealByArea("French");
                 setMeals(results);
             }
             catch (error) {
-                console.log(`An error occured during the initial loading: ${error}`)
+                console.error(`An error occured during the initial loading: ${error}`)
             }
         }
         getInitialResults();
@@ -33,11 +33,9 @@ export default function HomeScreen(){
             <FlatList
             data={meals}
             renderItem={({item}) => <MealCard meal={item} />}
-            keyExtractor={(item) => item.idMeal}
+            keyExtractor={(item) => String(item.idMeal)}
             style={{flex:1}}
-            
             />
-            <Text>Resultats: {meals.length}</Text>
         </View>
     );
 }

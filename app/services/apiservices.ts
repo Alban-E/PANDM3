@@ -1,31 +1,49 @@
-import { getMealsPreview, mealItem, mealPreview, retypeMeal } from "../Constants/types";
+import { mealItem, retypeMeal, retypeMeals } from "../Constants/types";
 import { axiosInstance } from "./axios";
+import { addMeals } from "./dbService";
 
-export async function getRecipeByName(name: string): Promise<mealPreview[]> {
+export async function getRecipeByName(name: string): Promise<mealItem[]> {
     const apiResults = await axiosInstance.get("/search.php", {
         params: {
             s: name,
         }
     })
-    return getMealsPreview(apiResults.data?.meals ?? []);
+
+    addMeals(apiResults.data?.meals ?? []);
+    return retypeMeals(apiResults.data?.meals ?? []);
 }
 
-export async function getRecipeByArea(area: string): Promise<mealPreview[]> {
+export async function getRecipeByArea(area: string): Promise<mealItem[]> {
     const apiResults = await axiosInstance.get("/filter.php", { 
         params: {
             a: area,
         } 
     });
-    return getMealsPreview(apiResults.data?.meals ?? []);
+
+    addMeals(apiResults.data?.meals ?? []);
+    return retypeMeals(apiResults.data?.meals ?? []);
 }
 
-export async function getRecipeByCategory(category : string): Promise<mealPreview[]> {
+export async function getRecipeByCategory(category : string): Promise<mealItem[]> {
     const apiResults = await axiosInstance.get('filter.php', {
         params:{
             c: category || null,
         }
     });
-    return getMealsPreview(apiResults.data?.meals ?? []);
+    
+    addMeals(apiResults.data?.meals ?? []);
+    return retypeMeals(apiResults.data?.meals ?? []);
+}
+
+export async function getRecipeDetails(id: number): Promise<mealItem | null>{
+    const apiResults = await axiosInstance.get("/lookup.php",{
+        params:{
+            i: String(id)
+        }
+    });
+
+    addMeals(apiResults.data?.meals ?? []);
+    return retypeMeal(apiResults.data?.meals[0] ?? []) ;
 }
 
 export async function getFilters(area: boolean = false, category: boolean = false): Promise<string[]>{
@@ -47,13 +65,4 @@ export async function getFilters(area: boolean = false, category: boolean = fals
         return apiResults.data;
     }
     return [];
-}
-
-export async function getMealDetails(id: number): Promise<mealItem | null>{
-    const apiResults = await axiosInstance.get("/lookup.php",{
-        params:{
-            i: String(id)
-        }
-    });
-    return retypeMeal(apiResults.data?.meals[0] ?? []) ;
 }
