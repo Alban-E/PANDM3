@@ -14,37 +14,37 @@ export default function Index(){
     const [currentFilters, setCurrentFilters] = useState<string[]>(["French","area"])
     const [loadedMeals, setLoadedMeals] = useState(10);
     const [HasMoreMeals, setHasMoreMeals] = useState(true);
-    const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+
+    const uniqueMeals = (list: mealPreview[]) => 
+    list.filter((meal, index, self) => 
+        self.findIndex(m => m.idMeal === meal.idMeal) === index
+    );
+
 
     useEffect(() => {
         async function getInitialResults() {
             try {
                 setupDB();
                 const { meals: results, hasMore } = await useMealByArea("French", 0);
-                setMeals(results);
+                setMeals(uniqueMeals(results));
                 setHasMoreMeals(hasMore);
             }
             catch (error) {
                 console.error(`An error occured during the initial loading: ${error}`);
-                setLoading(false);
+                setInitialLoading(false);
             }
-            finally{setLoading(false);}
+            finally{setInitialLoading(false);}
         }
         getInitialResults();
     }, []);
 
-    const [, forceUpdate] = useState(0);
-
-    useEffect(() => {
-        if (!loading) {
-            forceUpdate(n => n + 1);
-        }
-    }, [loading]);
     
 const loadMore = async () => {
-    if (loading || !HasMoreMeals) {return;}
+    if (initialLoading || loadingMore || !HasMoreMeals) {return;}
 
-    setLoading(true);
+    setLoadingMore(true);
     try {
         let results: mealPreview[] = [];
         let hasMore: boolean = false;
@@ -66,26 +66,25 @@ const loadMore = async () => {
         const uniqueResults = results.filter(
             newMeal => !meals.some(existing => existing.idMeal === newMeal.idMeal)
         );
-        setMeals([...meals, ...uniqueResults]);
+        setMeals(uniqueMeals([...meals, ...uniqueResults]));
         setLoadedMeals(loadedMeals + 10);
         setHasMoreMeals(hasMore);
-
-    } catch (error) {
-        console.error(`An error occured during the infinite scroll loading: ${error}`);
-    } finally {
-        setLoading(false);
+        } catch (error) {
+            console.error(`An error occured during the infinite scroll loading: ${error}`);
+        } finally {
+            setLoadingMore(false);
+        }
     }
-}
-    const handleMealsChange = (newMeals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name") => {
-        setMeals(newMeals);
-        setLoadedMeals(10);
+
+    const handleMealsChange = (newMeals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name", hasMore: boolean) => {
+        setMeals(uniqueMeals(newMeals));
+        setLoadedMeals(newMeals.length);
         setCurrentFilters([filterValue, filterType]);
-        setHasMoreMeals(newMeals.length >= 10);
+        setHasMoreMeals(hasMore);
     };
 
-
     return(
-        loading ? (
+        initialLoading ? (
             <SplashScreenComponent/>
         ): (
         <View style={styles.HomeBackground}>
@@ -100,7 +99,7 @@ const loadMore = async () => {
             style={{flex:1}}
             onEndReached={loadMore}
             onEndReachedThreshold={0.5} 
-            ListFooterComponent={loading ? <Text>Chargement...</Text> : null}
+            ListFooterComponent={loadingMore ? <Text style={{alignSelf: "center", marginBottom: 30}}>Chargement...</Text> : null}
             />
         </View>
 

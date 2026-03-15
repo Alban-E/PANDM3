@@ -4,7 +4,7 @@ import { mealPreview } from "../Constants/types";
 import { styles, Colors } from "../Constants/style";
 import { useMealByName } from "../hooks/useMeals";
 
-export function Searchbar({ onResults }: { onResults: (meals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name") => void }){
+export function Searchbar({ onResults }: { onResults: (meals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name", hasMore: boolean) => void }){
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -14,9 +14,9 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[], fil
             }
 
             try{
-                const { meals } = await useMealByName(search, 0);
-                onResults(meals, search, "name");            }
-            catch (error) {
+                const { meals, hasMore } = await useMealByName(search, 0);
+                onResults(meals, search, "name", hasMore);
+            }catch (error) {
                 console.error(`An error occured while searching a meal by name : ${error}`);
             }
         }

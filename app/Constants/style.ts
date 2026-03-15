@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
     FiltersContainer: {
         flex: 1,
         marginTop: 10,
+        marginBottom: 10,
         maxHeight: 100,
     },
     FiltersList: {

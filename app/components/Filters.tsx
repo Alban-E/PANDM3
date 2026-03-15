@@ -5,7 +5,7 @@ import { useMealByArea, useMealByCategory } from "../hooks/useMeals";
 import { mealPreview } from "../Constants/types";
 import { styles } from "../Constants/style";
 
-export function Filters({ onMealsChange }: { onMealsChange: (meals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name") => void }){
+export function Filters({ onMealsChange }: { onMealsChange: (meals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name", hasMore: boolean) => void }){
     const [areas, setAreas] = useState([""]);
     const [categories, setCategories] = useState([""]);
 
@@ -20,13 +20,13 @@ export function Filters({ onMealsChange }: { onMealsChange: (meals: mealPreview[
     }, [])
 
     const handleAreaPress = async (area: string) => {
-        const { meals } = await useMealByArea(area, 0);
-        onMealsChange(meals, area, "area");
+        const { meals, hasMore } = await useMealByArea(area, 0);
+        onMealsChange(meals, area, "area", hasMore);
     };
 
     const handleCategoryPress = async (category: string) => {
-        const { meals } = await useMealByCategory(category, 0);
-        onMealsChange(meals, category, "category");
+        const { meals, hasMore } = await useMealByCategory(category, 0);
+        onMealsChange(meals, category, "category", hasMore);
     };
 
     return (
