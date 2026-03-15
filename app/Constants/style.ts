@@ -98,38 +98,78 @@ export const styles = StyleSheet.create({
     },
     DetailsBackground: {
         flex: 1,
-        alignItems: "center",
         backgroundColor: Colors.darkBackground,
     },
-    DetailsBackButton:{
-
+    DetailsBackButton: {
+        marginTop: 50,
+        marginLeft: 20,
+        alignSelf: "flex-start",
+        backgroundColor: Colors.lightBackGround,
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+    },
+    DetailsBackButtonText: {
+        color: Colors.darkText,
+        fontWeight: "bold",
+        fontSize: 16,
     },
     MealTitle: {
-
+        color: Colors.title,
+        fontWeight: "bold",
+        fontSize: 30,
+        textAlign: "center",
+        marginTop: 20,
+        marginHorizontal: 20,
     },
     MealCategory: {
-
+        color: Colors.ligthText,
+        fontSize: 16,
+        marginTop: 6,
+        fontStyle: "italic",
     },
-    MealArea:{
-
-    },
-    MealInstructions: {
-
+    MealArea: {
+        color: Colors.ligthText,
+        fontSize: 16,
+        marginBottom: 10,
+        fontStyle: "italic",
     },
     MealThumb: {
-        height: 100,
-        width: 100,
+        height: 280,
+        width: 280,
+        borderRadius: 20,
+        marginVertical: 16,
     },
     MealTags: {
-
+        color: Colors.title,
+        fontSize: 14,
+        marginBottom: 10,
+        fontStyle: "italic",
     },
     MealVideo: {
-
+        height: 220,
+        width: 320,
+        borderRadius: 12,
+        marginVertical: 16,
     },
     MealIngredients: {
-
+        color: Colors.ligthText,
+        fontSize: 16,
+        marginHorizontal: 20,
+        marginBottom: 6,
+        fontWeight: "bold",
     },
     MealMeasures: {
-
-    }
+        color: Colors.ligthText,
+        fontSize: 15,
+        marginHorizontal: 20,
+        marginBottom: 20,
+    },
+    MealInstructions: {
+        color: Colors.ligthText,
+        fontSize: 15,
+        marginHorizontal: 20,
+        marginBottom: 16,
+        lineHeight: 22,
+    },
 })

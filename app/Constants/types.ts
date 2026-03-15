@@ -78,8 +78,8 @@ export function retypeMeal(meal: sourceMealItem): mealItem | null {
         const measure = meal[`strMeasure${j}` as keyof sourceMealItem] as string
 
         if (ingredient && ingredient.trim() !== "") {
-            ingredients += ingredient;
-            measures += measure;
+            ingredients += (ingredients ? ", " : "") + ingredient;
+            measures += (measures ? ", " : "") + measure;
         }
     }
 

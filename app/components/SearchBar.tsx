@@ -8,22 +8,20 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[], fil
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        async function searchRecipeByName() {
-            if (!search.trim()){
-                return;
-            }
+        const timer = setTimeout(async () => {
+            if (!search.trim()) return;
 
-            try{
+            try {
                 const { meals, hasMore } = await useMealByName(search, 0);
                 onResults(meals, search, "name", hasMore);
-            }catch (error) {
+            } catch (error) {
                 console.error(`An error occured while searching a meal by name : ${error}`);
             }
-        }
+        }, 500);
 
-        searchRecipeByName();
-    }, [search])
-    
+        return () => clearTimeout(timer);
+    }, [search]);
+
     return (
         <TextInput
         value={search}
