@@ -46,23 +46,25 @@ export async function getRecipeDetails(id: number): Promise<mealItem | null>{
     return retypeMeal(apiResults.data?.meals[0] ?? []) ;
 }
 
-export async function getFilters(area: boolean = false, category: boolean = false): Promise<string[]>{
+export async function getFilters(getArea: boolean = false, getCategory: boolean = false): Promise<string[][]>{
     const defaultParam = "list";
-    if (area) {
+    let result: string[][] = [[],[]] ;
+    if (getArea) {
         const apiResults = await axiosInstance.get('/list.php', {
             params:{
                 a: defaultParam,
             }
         });
-        return apiResults.data;
+        result[0] = apiResults?.data?.meals?.map((area: any) => area.strArea) ?? [];
     }
-    else if (category) {
+    
+    if (getCategory) {
         const apiResults = await axiosInstance.get('/list.php', {
             params:{
                 c: defaultParam,
             }
         });
-        return apiResults.data;
+        result[1] = apiResults?.data?.meals?.map((category: any) => category.strCategory) ?? [];
     }
-    return [];
+    return result;
 }

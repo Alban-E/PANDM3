@@ -4,19 +4,19 @@ import { mealPreview } from "../Constants/types";
 import { styles, Colors } from "../Constants/style";
 import { useMealByName } from "../hooks/useMeals";
 
-export function Searchbar({ onResults }: { onResults: (meals: mealPreview[]) => void }){
+export function Searchbar({ onResults }: { onResults: (meals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name") => void }){
     const [search, setSearch] = useState('');
 
     useEffect(() => {
         async function searchRecipeByName() {
             if (!search.trim()){
-                onResults([]);
+                onResults([], "", "name");
                 return;
             }
 
             try{
-                const meals = await useMealByName(search);
-                onResults(meals);
+                const meals = await useMealByName(search, 0);
+                onResults(meals, search, "name");
             }
             catch (error) {
                 console.error(`An error occured while searching a meal by name : ${error}`);
@@ -24,7 +24,7 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[]) => 
         }
 
         searchRecipeByName();
-    }, [search, onResults])
+    }, [search])
     
     return (
         <TextInput

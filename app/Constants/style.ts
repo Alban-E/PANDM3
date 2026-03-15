@@ -52,6 +52,17 @@ export const styles = StyleSheet.create({
         marginTop: 20,
         padding: 5,
     },
+    FiltersContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    AreaFilters: {
+        flex: 1,
+    },
+    CategoryFilters: {
+        flex: 1,
+    },
     MealCard: {
         flex: 1,
         backgroundColor: Colors.lightBackGround,
