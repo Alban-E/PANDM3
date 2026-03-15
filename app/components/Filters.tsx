@@ -33,10 +33,12 @@ export function Filters({ onMealsChange }: { onMealsChange: (meals: mealPreview[
         <View style={styles.FiltersContainer}>
             <FlatList 
             data={areas}
+            style={styles.FiltersList}
+            showsHorizontalScrollIndicator={false}
             renderItem ={({item}) => 
                 <TouchableOpacity 
                 onPress={()=>handleAreaPress(item)}
-                style={styles.AreaFilters}>
+                style={styles.FiltersButton}>
                     <Text>{item}</Text>
                 </TouchableOpacity>}
             horizontal = {true}
@@ -44,10 +46,12 @@ export function Filters({ onMealsChange }: { onMealsChange: (meals: mealPreview[
 
             <FlatList
             data={categories}
+            style={styles.FiltersList}
+            showsHorizontalScrollIndicator={false}
             renderItem={({item}) => 
                 <TouchableOpacity 
                 onPress={() => handleCategoryPress(item)}
-                style={styles.CategoryFilters}>
+                style={styles.FiltersButton}>
                     <Text>{item}</Text>
                 </TouchableOpacity>}
             horizontal = {true}

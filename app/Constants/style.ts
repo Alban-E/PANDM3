@@ -54,14 +54,22 @@ export const styles = StyleSheet.create({
     },
     FiltersContainer: {
         flex: 1,
+        marginTop: 10,
+        maxHeight: 100,
+    },
+    FiltersList: {
+        marginTop: 10,
+    },
+    FiltersButton: {
+        backgroundColor: Colors.lightBackGround,
+        borderRadius: 10,
+        paddingLeft: 5,
+        paddingRight: 5,
+        marginLeft: 5,
+        marginRight: 5,
         justifyContent: "center",
         alignItems: "center",
-    },
-    AreaFilters: {
-        flex: 1,
-    },
-    CategoryFilters: {
-        flex: 1,
+        color: Colors.darkText
     },
     MealCard: {
         flex: 1,
@@ -81,6 +89,8 @@ export const styles = StyleSheet.create({
     },
     MealCardName: {
         color: Colors.darkText,
+        paddingLeft: 10,
+        paddingRight: 10,
         paddingBottom: 10,
         fontSize: 20,
     },
@@ -88,6 +98,9 @@ export const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         backgroundColor: Colors.darkBackground,
+    },
+    DetailsBackButton:{
+
     },
     MealTitle: {
 

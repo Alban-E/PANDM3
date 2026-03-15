@@ -10,7 +10,6 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[], fil
     useEffect(() => {
         async function searchRecipeByName() {
             if (!search.trim()){
-                onResults([], "", "name");
                 return;
             }
 

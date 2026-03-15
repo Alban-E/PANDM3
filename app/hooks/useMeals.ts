@@ -1,6 +1,18 @@
 import { getMealsPreview, mealItem, mealPreview } from "../Constants/types";
 import { getRecipeByArea, getRecipeByCategory, getRecipeByName, getRecipeDetails } from "../services/apiservices";
-import { addMeal, addMeals, getMealsByArea, getMealById, getMealsByName, getMealsByCategory } from "../services/dbService";
+import { addMeal, addMeals, getMealsByArea, getMealById, getMealsByName, getMealsByCategory, getEveryMeals } from "../services/dbService";
+
+export async function useAnyMeals(): Promise<mealPreview[]>{
+    const dbResult = getEveryMeals();
+    if (dbResult.length === 0) {
+        const apiResult = await getRecipeByArea("French");
+        addMeals(apiResult);
+        return getMealsPreview(apiResult)
+    }
+    return getMealsPreview(dbResult);
+
+}
+
 
 export async function useMealByName(name:string, amountAlreadyLoaded:number): Promise<mealPreview[]>{
     const dbResult = getMealsByName(name);

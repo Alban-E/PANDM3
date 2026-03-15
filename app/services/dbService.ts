@@ -93,3 +93,14 @@ export function getMealsByArea(area: string): mealItem[] {
         Measures: meal.Measures
     }));
 }
+
+export function getEveryMeals(): mealItem[]{
+    const meals = db.getAllSync<mealItem>(`SELECT * FROM meals`);
+
+        return meals.map(meal => ({
+        ...meal,
+        Ingredients: meal.Ingredients,
+        Measures: meal.Measures
+    }));
+
+}

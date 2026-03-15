@@ -1,6 +1,6 @@
-import { Image, View, Text } from "react-native";
+import { Image, View, Text, TouchableOpacity } from "react-native";
 import {styles} from "./Constants/style";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { mealItem } from "./Constants/types";
 import { useMealById } from "./hooks/useMeals";
@@ -23,6 +23,7 @@ export default function DetailsScreen(){
 
     return(
         <View style={styles.DetailsBackground}>
+            <TouchableOpacity style={styles.DetailsBackButton} onPress={() => router.back()}><Text></Text></TouchableOpacity>
             <Text style={styles.MealTitle}>{meal?.Meal}</Text>
             <Text style={styles.MealCategory}>{meal?.Category}</Text>
             <Text style={styles.MealArea}>{meal?.Area}</Text>
