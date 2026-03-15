@@ -2,46 +2,54 @@ import { getMealsPreview, mealItem, mealPreview } from "../Constants/types";
 import { getRecipeByArea, getRecipeByCategory, getRecipeByName, getRecipeDetails } from "../services/apiservices";
 import { addMeal, addMeals, getMealsByArea, getMealById, getMealsByName, getMealsByCategory, getEveryMeals } from "../services/dbService";
 
-export async function useAnyMeals(): Promise<mealPreview[]>{
-    const dbResult = getEveryMeals();
-    if (dbResult.length === 0) {
-        const apiResult = await getRecipeByArea("French");
-        addMeals(apiResult);
-        return getMealsPreview(apiResult)
-    }
-    return getMealsPreview(dbResult);
-
-}
-
-
-export async function useMealByName(name:string, amountAlreadyLoaded:number): Promise<mealPreview[]>{
-    const dbResult = getMealsByName(name);
-    if (dbResult.length === 0) {
-        const apiResult = await getRecipeByName(name);
-        addMeals(apiResult);
-        return getMealsPreview(apiResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10));
-    }
-    return getMealsPreview(dbResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10));
-}
-
-export async function useMealByCategory(category:string, amountAlreadyLoaded:number): Promise<mealPreview[]>{
-    const dbResult = getMealsByCategory(category);
-    if (dbResult.length === 0) {
-        const apiResult = await getRecipeByCategory(category);
-        addMeals(apiResult);
-        return getMealsPreview(apiResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10));
-    }
-    return getMealsPreview(dbResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10));
-}
-
-export async function useMealByArea(area:string, amountAlreadyLoaded:number): Promise<mealPreview[]>{
+export async function useMealByArea(area: string, amountAlreadyLoaded: number): Promise<{meals: mealPreview[], hasMore: boolean}> {
     const dbResult = getMealsByArea(area);
-    if (dbResult.length === 0) {
-        const apiResult = await getRecipeByArea(area);
-        addMeals(apiResult);
-        return getMealsPreview(apiResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10))
+    const dbTotal = dbResult.length;
+
+    // DB pas encore épuisée
+    if (amountAlreadyLoaded < dbTotal) {
+        const slice = dbResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10);
+        return { meals: getMealsPreview(slice), hasMore: true };
     }
-    return getMealsPreview(dbResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10));
+
+    // DB épuisée, on calcule où on en est dans l'API
+    const apiOffset = amountAlreadyLoaded - dbTotal;
+    const apiResult = await getRecipeByArea(area);
+    addMeals(apiResult);
+    const slice = apiResult.slice(apiOffset, apiOffset + 10);
+    return { meals: getMealsPreview(slice), hasMore: slice.length >= 10 };
+}
+
+export async function useMealByCategory(category: string, amountAlreadyLoaded: number): Promise<{meals: mealPreview[], hasMore: boolean}> {
+    const dbResult = getMealsByCategory(category);
+    const dbTotal = dbResult.length;
+
+    if (amountAlreadyLoaded < dbTotal) {
+        const slice = dbResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10);
+        return { meals: getMealsPreview(slice), hasMore: true };
+    }
+
+    const apiOffset = amountAlreadyLoaded - dbTotal;
+    const apiResult = await getRecipeByCategory(category);
+    addMeals(apiResult);
+    const slice = apiResult.slice(apiOffset, apiOffset + 10);
+    return { meals: getMealsPreview(slice), hasMore: slice.length >= 10 };
+}
+
+export async function useMealByName(name: string, amountAlreadyLoaded: number): Promise<{meals: mealPreview[], hasMore: boolean}> {
+    const dbResult = getMealsByName(name);
+    const dbTotal = dbResult.length;
+
+    if (amountAlreadyLoaded < dbTotal) {
+        const slice = dbResult.slice(amountAlreadyLoaded, amountAlreadyLoaded + 10);
+        return { meals: getMealsPreview(slice), hasMore: true };
+    }
+
+    const apiOffset = amountAlreadyLoaded - dbTotal;
+    const apiResult = await getRecipeByName(name);
+    addMeals(apiResult);
+    const slice = apiResult.slice(apiOffset, apiOffset + 10);
+    return { meals: getMealsPreview(slice), hasMore: slice.length >= 10 };
 }
 
 export async function useMealById(id: number): Promise<mealItem | null> {

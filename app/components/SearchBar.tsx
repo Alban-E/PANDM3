@@ -14,9 +14,8 @@ export function Searchbar({ onResults }: { onResults: (meals: mealPreview[], fil
             }
 
             try{
-                const meals = await useMealByName(search, 0);
-                onResults(meals, search, "name");
-            }
+                const { meals } = await useMealByName(search, 0);
+                onResults(meals, search, "name");            }
             catch (error) {
                 console.error(`An error occured while searching a meal by name : ${error}`);
             }

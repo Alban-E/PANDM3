@@ -20,13 +20,13 @@ export function Filters({ onMealsChange }: { onMealsChange: (meals: mealPreview[
     }, [])
 
     const handleAreaPress = async (area: string) => {
-        const results = await useMealByArea(area, 0);
-        onMealsChange(results, area, "area");
+        const { meals } = await useMealByArea(area, 0);
+        onMealsChange(meals, area, "area");
     };
 
     const handleCategoryPress = async (category: string) => {
-        const results = await useMealByCategory(category, 0);
-        onMealsChange(results, category, "category");
+        const { meals } = await useMealByCategory(category, 0);
+        onMealsChange(meals, category, "category");
     };
 
     return (

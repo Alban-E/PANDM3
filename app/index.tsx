@@ -5,7 +5,7 @@ import { Searchbar } from "./components/SearchBar";
 import { mealPreview } from "./Constants/types";
 import { setupDB } from "./services/dbService";
 import { MealCard } from "./components/MealCard";
-import { useAnyMeals, useMealByArea, useMealByCategory, useMealByName } from "./hooks/useMeals";
+import { useMealByArea, useMealByCategory, useMealByName } from "./hooks/useMeals";
 import { Filters } from "./components/Filters";
 import { SplashScreenComponent } from "./components/SplashScreen";
 
@@ -20,10 +20,9 @@ export default function Index(){
         async function getInitialResults() {
             try {
                 setupDB();
-                const results = await useAnyMeals();
-
+                const { meals: results, hasMore } = await useMealByArea("French", 0);
                 setMeals(results);
-                setHasMoreMeals(false);
+                setHasMoreMeals(hasMore);
             }
             catch (error) {
                 console.error(`An error occured during the initial loading: ${error}`);
@@ -42,36 +41,41 @@ export default function Index(){
         }
     }, [loading]);
     
-    const loadMore = async () =>{
-        if (loading || !HasMoreMeals) {return;}
+const loadMore = async () => {
+    if (loading || !HasMoreMeals) {return;}
 
-        setLoading(true);
-        try {
-            let results:mealPreview[] = [];
-            switch (currentFilters[1]) {
-                case "area":
-                    results = await useMealByArea(currentFilters[0], loadedMeals)
-                    break;
-                case "category":
-                    results = await useMealByCategory(currentFilters[0], loadedMeals)
-                    break
-                case "name":
-                    results = await useMealByName(currentFilters[0], loadedMeals)
-                    break;
-                default:
-                    break;
-            }
-            
-            setMeals([...meals, ...results]);
-            setLoadedMeals(loadedMeals + 10);
-            setHasMoreMeals(results.length >= 10)
-            
-        } catch (error) {
-            console.error(`An error occured during the infinite scroll loading: ${error}`);
+    setLoading(true);
+    try {
+        let results: mealPreview[] = [];
+        let hasMore: boolean = false;
+
+        switch (currentFilters[1]) {
+            case "area":
+                ({ meals: results, hasMore } = await useMealByArea(currentFilters[0], loadedMeals));
+                break;
+            case "category":
+                ({ meals: results, hasMore } = await useMealByCategory(currentFilters[0], loadedMeals));
+                break;
+            case "name":
+                ({ meals: results, hasMore } = await useMealByName(currentFilters[0], loadedMeals));
+                break;
+            default:
+                break;
         }
-        finally {setLoading(false);}
-    }
 
+        const uniqueResults = results.filter(
+            newMeal => !meals.some(existing => existing.idMeal === newMeal.idMeal)
+        );
+        setMeals([...meals, ...uniqueResults]);
+        setLoadedMeals(loadedMeals + 10);
+        setHasMoreMeals(hasMore);
+
+    } catch (error) {
+        console.error(`An error occured during the infinite scroll loading: ${error}`);
+    } finally {
+        setLoading(false);
+    }
+}
     const handleMealsChange = (newMeals: mealPreview[], filterValue: string, filterType: "area" | "category" | "name") => {
         setMeals(newMeals);
         setLoadedMeals(10);
